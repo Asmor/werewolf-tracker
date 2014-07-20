@@ -89,7 +89,7 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 			$scope.playersToAdd = "";
 			$scope.addPlayers = function () {
 				playerStore.addPlayers($scope.playersToAdd);
-				$state.go("^.list");
+				$state.go("^.list_players");
 			};
 		},
 	});
