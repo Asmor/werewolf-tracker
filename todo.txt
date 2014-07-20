@@ -1,0 +1,19 @@
+Hammer time for touch
+Start game
+	Select players
+		-> Manage players
+	Select scenario
+		-> Manage scenario
+	Call people on the first night and grab roles
+	Day time
+		Summarize night
+		Remind about effects
+		Get elimination(s) (may have none
+
+New user experience:
+	* Clicks start game
+	* Select players
+		* Add players
+	* Choose scenario
+		* Create scenario
+	* Sees card list. Prompted to start the game

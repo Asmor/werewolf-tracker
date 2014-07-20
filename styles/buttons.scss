@@ -1,0 +1,33 @@
+$addColor: #0f0;
+$removeColor: #f00;
+$disableColor: #555;
+
+.button {
+	&__add {
+		background-color: $addColor;
+	}
+
+	&__remove {
+		background-color: $removeColor;
+	}
+
+	&__disabled {
+		background-color: $disableColor;
+	}
+}
+
+.button-simple {
+	background-color: transparent;
+	border: 0;
+	&__add {
+		color: $addColor;
+	}
+
+	&__remove {
+		color: $removeColor;
+	}
+
+	&__disabled {
+		color: $disableColor;
+	}
+}

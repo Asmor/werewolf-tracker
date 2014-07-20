@@ -1,0 +1,15 @@
+.scenario {
+	@extend .card;
+
+	background-color: #ddd;
+
+	&__selected {
+		color: white;
+		background-color: #00d;
+	}
+
+	&--controls {
+		float: right;
+		display: inline-block;
+	}
+}

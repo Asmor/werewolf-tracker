@@ -1,0 +1,13 @@
+.role {
+	@extend .card;
+
+	width: 150px;
+	color: white;
+
+	&__team-villagers {
+		background-color: $villager-color;
+	}
+	&__team-werewolves {
+		background-color: $werewolf-color;
+	}
+}

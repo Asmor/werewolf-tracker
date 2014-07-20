@@ -1,0 +1,6 @@
+@mixin box {
+	height: $box-height;
+	padding: $box-padding;
+	margin: $box-margin;
+	border-radius: 5px;
+}

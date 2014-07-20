@@ -1,0 +1,3 @@
+<a ui-sref="^.add_players"><button>Add players</button></a>
+<div ng-show="confirmPlayerSelection"><button ng-click="confirmPlayerSelection()">Confirm selected players</button></div>
+<ng-include ng-repeat="player in players" src="'partials/playerCard.html'"></ng-include>

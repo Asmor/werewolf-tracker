@@ -1,0 +1,44 @@
+<input ng-model="scenario.name" placeholder="Scenario name...">
+<button ng-click="saveScenario()">Save</button>
+<button ng-click="removeScenario()" ng-show="oldScenarioName">Delete</button>
+<br>
+Balance: {{ scenario.balance }}. Player count: {{ scenario.playerCount }}. Name: {{ scenario.name }}
+<table>
+	<thead>
+		<tr>
+			<td>Team</td>
+			<td>Count</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="(team, qty) in scenario.teams">
+			<td> {{ team }} </td>
+			<td> {{ qty }} </td>
+		</tr>
+	</tbody>
+</table>
+<table>
+	<thead>
+		<tr>
+			<td>Role</td>
+			<td>Team</td>
+			<td>Value</td>
+			<td>Add/Remove</td>
+			<td>Qty</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="role in roles">
+			<td><div class="role {{ role.teamClass }}"> {{ role.name }} </div></td>
+			<td>{{ role.team }}</td>
+			<td>{{ role.value }}</td>
+			<td>
+				<button class="button button__add" ng-click="scenario.add(role)"><i class="fa fa-plus"></i></button>
+				<button class="button button__remove" ng-click="scenario.remove(role)"><i class="fa fa-minus"></i></button>
+			</td>
+			<td>
+				{{ scenario.getQty(role) }}
+			</td>
+		</tr>
+	</tbody>
+</table>
