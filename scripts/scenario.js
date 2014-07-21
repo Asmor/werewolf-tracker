@@ -6,11 +6,28 @@ function Scenario(load) {
 	var scenario = this;
 	scenario.roles = {};
 	scenario.playerCount = 0;
+	scenario.minimumPlayers = 0;
 	scenario.balance = 0;
 	scenario.teams = {};
 	scenario.teams[teams.werewolf] = 0;
 	scenario.teams[teams.villager] = 0;
 	scenario.name = "";
+
+	Object.defineProperty(scenario, "deck", {
+		get: function () {
+			var deck = [];
+
+			Object.keys(scenario.roles).forEach(function (key) {
+				var role = rolesByName[key],
+					i;
+				for ( i = 0; i < scenario.roles[key]; i++) {
+					deck.push(role);
+				}
+			});
+
+			return deck;
+		},
+	});
 
 	Object.defineProperty(scenario, "export", {
 		get: function () {
@@ -74,6 +91,10 @@ function Scenario(load) {
 	function adjustTotals(role, diff) {
 		scenario.balance += role.value * diff;
 		scenario.playerCount += diff;
+
+		if ( role !== rolesByName["Villager"] ) {
+			scenario.minimumPlayers += diff;
+		}
 
 		if ( ! scenario.teams[role.team] ) {
 			scenario.teams[role.team] = 0;

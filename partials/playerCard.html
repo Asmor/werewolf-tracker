@@ -1,4 +1,4 @@
-<div class="player" ng-class="getSelected(player)" ng-click="togglePlayer(player)">
+<div class="player" ng-class="playerSelected(player)" ng-click="togglePlayer(player)">
 	{{ player }}
 	<span class="player--controls" ng-show="removePlayer">
 		<button class="button-simple button-simple__remove" ng-click="removePlayer(player)"><i class="fa fa-trash-o"></i></button>

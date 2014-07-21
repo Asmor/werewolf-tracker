@@ -2,7 +2,8 @@
 <button ng-click="saveScenario()">Save</button>
 <button ng-click="removeScenario()" ng-show="oldScenarioName">Delete</button>
 <br>
-Balance: {{ scenario.balance }}. Player count: {{ scenario.playerCount }}. Name: {{ scenario.name }}
+Balance: {{ scenario.balance }}. Player count: {{ scenario.playerCount }}.
+<span title="Villagers will be added or removed to suit the number of players">Minimum players: {{ scenario.minimumPlayers }}</span>
 <table>
 	<thead>
 		<tr>

@@ -99,9 +99,10 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	$stateProvider.state("game", {
 		url: "/game",
 		templateUrl: "pages/game.html",
-		controller: function ($scope) {
+		controller: function ($scope, $state) {
 			$scope.selectedPlayers = [];
-			$scope.getSelected = function (player) {
+			$scope.selectedScenario = "";
+			$scope.playerSelected = function (player) {
 				if ( $scope.selectedPlayers.indexOf(player) === -1 ) {
 					return "";
 				} else {
@@ -117,7 +118,26 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 				}
 			};
 			$scope.confirmPlayerSelection = function () {
-				// TODO
+				$state.go("^.list_scenarios");
+			};
+			$scope.scenarioSelected = function (scenario) {
+				if ( $scope.scenario === scenario ) {
+					return "scenario__selected";
+				} else {
+					return "";
+				}
+			};
+			$scope.selectScenario = function (scenario) {
+				if ($scope.scenario === scenario) {
+					$scope.scenario = "";
+				} else {
+					$scope.scenario = scenario;
+				}
+			};
+			$scope.confirmScenarioSelection = function () {
+				scenarioStore.load($scope.scenario, function (scenario) {
+					var game = new Game(scenario, $scope.selectedPlayers);
+				});
 			};
 		},
 	});
@@ -145,6 +165,41 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 			};
 		},
 	});
+	$stateProvider.state("game.list_scenarios", {
+		url: "/choose_scenario",
+		templateUrl: "pages/scenario.list.html",
+		controller: function ($scope) {
+			$scope.scenarios = scenarioStore.scenarios.slice(0);
+		},
+	});
+	// $stateProvider.state("scenario.manage", {
+	// 	url: "/manage",
+	// 	templateUrl: "pages/scenario.manage.html",
+	// 	controller: function ($scope, $state) {
+	// 		$scope.roles = roles;
+	// 		if ( ! $scope.scenario ) {
+	// 			$scope.scenario = new Scenario();
+	// 		}
+
+	// 		$scope.oldScenarioName = $scope.scenario.name;
+
+	// 		$scope.saveScenario = function () {
+	// 			if ($scope.scenario.name.trim()) {
+	// 				scenarioStore.save($scope.scenario, $scope.oldScenarioName);
+	// 				$scope.scenario = false;
+	// 				$state.go("^.list_scenarios");
+	// 			} else {
+	// 				alert("Enter a name for the scenario");
+	// 			}
+	// 		};
+
+	// 		$scope.removeScenario = function () {
+	// 			scenarioStore.remove($scope.oldScenarioName);
+	// 				$state.go("^.list_scenarios");
+	// 		};
+	// 	}
+	// });
+
 });
 
 function reload($scope, $state) {

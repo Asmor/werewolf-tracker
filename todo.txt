@@ -17,3 +17,6 @@ New user experience:
 	* Choose scenario
 		* Create scenario
 	* Sees card list. Prompted to start the game
+
+Bugs:
+	Can't edit scenario in /game/choose_scenario
