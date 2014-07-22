@@ -11,11 +11,12 @@ function Role(opts) {
 	// Need to give a name to "this" so we can reference it inside other functions
 	var role = this,
 		defaults = {
-			name: opts.name,
-			team: opts.team,
-			value: opts.value,
-			min: opts.min || 1,
-			max: opts.max || 1,
+			name: "",
+			team: teams.villager,
+			value: 1,
+			min: 1,
+			max: 1,
+			init: function () { return [] },
 			looksLikeWerewolf: function () {
 				return role.team === teams.werewolf;
 			},
@@ -30,7 +31,7 @@ function Role(opts) {
 				} else {
 					return 6;
 				}
-			}
+			},
 		};
 
 	Object.keys(defaults).forEach(function (key) {
@@ -39,7 +40,6 @@ function Role(opts) {
 }
 
 function makeProperty(obj, propname, opts, defaultHandler) {
-	/* jshint validthis: true */
 	Object.defineProperty(obj, propname, {
 		get: function () {
 			var handler = (typeof opts[propname] !== "undefined") ? opts[propname] : defaultHandler;
@@ -58,13 +58,10 @@ function addRole(role) {
 }
 
 addRole(new Role({ name: "Villager",
-	team: teams.villager,
-	value: 1,
 	max: 15,
 	sortOrder: 1,
 }));
 addRole(new Role({ name: "Seer",
-	team: teams.villager,
 	value: 7,
 	sortOrder: 2,
 }));
@@ -74,13 +71,45 @@ addRole(new Role({ name: "Werewolf",
 	max: 12,
 	sortOrder: 3,
 }));
+addRole(new Role({ name: "Frankenstein",
+	init: function () {
+		return [{
+			action: "subscribe",
+			subscribeTo: "death",
+			notify: function (role, player) {
+				// TODO: If the role was a villager, assign his role to Frank
+			},
+		}];
+	},
+	value: function () {
+		return function (args) {
+			if ( ! args.scenario ) {
+				return 0;
+			}
+
+			var i, total = 0;
+
+			Object.keys(args.scenario.roles).forEach(function (key) {
+				var role = rolesByName[key],
+					ct = args.scenario.roles[key];
+				if (
+					(role.team === teams.villager)
+					&& ! role.name.match(/^(Frankenstein|Villager)$/)
+				) {
+					total += 2 * ct;
+				}
+
+			});
+
+			return total;
+		}
+	},
+}));
 addRole(new Role({ name: "Lycan",
-	team: teams.villager,
 	value: -1,
 	looksLikeWerewolf: true,
 }));
 addRole(new Role({ name: "Mason",
-	team: teams.villager,
 	value: 2,
 	min: 2,
 	max: 3,
@@ -94,3 +123,11 @@ roles.sort(function (a, b) {
 		return a.sortOrder - b.sortOrder;
 	}
 });
+
+function getRoleValue(role, scenario) {
+	if ( typeof role.value === "function" ) {
+		return role.value({scenario: scenario});
+	} else {
+		return role.value;
+	}
+}

@@ -62,6 +62,10 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 				scenarioStore.remove($scope.oldScenarioName);
 					$state.go("^.list_scenarios");
 			};
+
+			$scope.getRoleVal = function (role) {
+				return getRoleValue(role, $scope.scenario);
+			}
 		}
 	});
 

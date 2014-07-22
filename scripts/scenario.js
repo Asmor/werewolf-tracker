@@ -7,7 +7,6 @@ function Scenario(load) {
 	scenario.roles = {};
 	scenario.playerCount = 0;
 	scenario.minimumPlayers = 0;
-	scenario.balance = 0;
 	scenario.teams = {};
 	scenario.teams[teams.werewolf] = 0;
 	scenario.teams[teams.villager] = 0;
@@ -42,6 +41,20 @@ function Scenario(load) {
 				roles: clone,
 			};
 		},
+	});
+
+	Object.defineProperty(scenario, "balance", {
+		get: function () {
+			var total = 0;
+
+			Object.keys(scenario.roles).forEach(function (key) {
+				var role = rolesByName[key],
+					ct = scenario.roles[key];
+				total += getRoleValue(role, scenario) * ct;
+			});
+
+			return total;
+		}
 	});
 
 	scenario.add = function (role, qty) {
@@ -89,7 +102,6 @@ function Scenario(load) {
 	};
 
 	function adjustTotals(role, diff) {
-		scenario.balance += role.value * diff;
 		scenario.playerCount += diff;
 
 		if ( role !== rolesByName["Villager"] ) {

@@ -19,14 +19,8 @@ function Game(scenario, players) {
 		game.scenario.remove(villager, diff);
 	}
 
-	deck = shuffle(scenario.deck);
-
-	for ( i = 0; i < players.length; i++ ) {
-		game.players[players[i]] = {
-			name: players[i],
-			role: deck[i]
-		}
-	}
 	window.game = game;
 	console.log(game.players);
 }
+
+// TODO: Implement "init" functionality, and pub/sub for game events. See Frankenstein role for example
