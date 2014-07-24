@@ -73,11 +73,11 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.when("/players", "/players/list");
 	$stateProvider.state("players", {
 		url: "/players",
-		templateUrl: "pages/players.html",
+		templateUrl: "pages/people.html",
 	});
 	$stateProvider.state("players.list_players", {
 		url: "/list",
-		templateUrl: "pages/players.list.html",
+		templateUrl: "pages/people.list.html",
 		controller: function ($scope, $state) {
 			$scope.players = playerStore.players;
 			$scope.removePlayer = function (name) {
@@ -88,7 +88,7 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	});
 	$stateProvider.state("players.add_players", {
 		url: "/add",
-		templateUrl: "pages/players.add.html",
+		templateUrl: "pages/people.add.html",
 		controller: function ($scope, $state) {
 			$scope.playersToAdd = "";
 			$scope.addPlayers = function () {
@@ -147,14 +147,14 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	});
 	$stateProvider.state("game.list_players", {
 		url: "/list_players",
-		templateUrl: "pages/players.list.html",
+		templateUrl: "pages/people.list.html",
 		controller: function ($scope) {
 			$scope.players = playerStore.players;
 		},
 	});
 	$stateProvider.state("game.add_players", {
 		url: "/add_players",
-		templateUrl: "pages/players.add.html",
+		templateUrl: "pages/people.add.html",
 		controller: function ($scope, $state) {
 			$scope.playersToAdd = "";
 			$scope.addPlayers = function () {
