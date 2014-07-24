@@ -1,52 +1,52 @@
 /* jshint globalstrict: true */
 "use strict";
 
-var playerStore = {
-	playerList: [],
-	addPlayers: function (list, skipSave) {
+var peopleStore = {
+	peopleList: [],
+	addPeople: function (list, skipSave) {
 		var toAdd = list.split("\n"),
 			added = [],
 			i, name;
 
 		for (i = 0; i < toAdd.length; i++) {
 			name = toAdd[i].trim();
-			if ( name && (playerStore.playerList.indexOf(name) === -1) ) {
-				playerStore.playerList.push(name);
+			if ( name && (peopleStore.peopleList.indexOf(name) === -1) ) {
+				peopleStore.peopleList.push(name);
 				added.push(name);
 			}
 		}
 
-		playerStore.playerList.sort(function (a, b) {
+		peopleStore.peopleList.sort(function (a, b) {
 			return a.toLowerCase() > b.toLowerCase();
 		});
 
-		if ( !skipSave ) { playerStore.save(); }
+		if ( !skipSave ) { peopleStore.save(); }
 
 		return added;
 	},
-	removePlayer: function (name, skipSave) {
-		var i = playerStore.playerList.indexOf(name);
+	removePerson: function (name, skipSave) {
+		var i = peopleStore.peopleList.indexOf(name);
 
 		if ( i !== -1 ) {
-			playerStore.playerList.splice(i, 1);
+			peopleStore.peopleList.splice(i, 1);
 		}
 
-		if ( !skipSave ) { playerStore.save(); }
+		if ( !skipSave ) { peopleStore.save(); }
 	},
 	save: function () {
-		dataStore.store("players", playerStore.playerList.join("\n"));	
+		dataStore.store("people", peopleStore.peopleList.join("\n"));	
 	}
 };
 
-Object.defineProperty(playerStore, "players", {
+Object.defineProperty(peopleStore, "people", {
 	get: function () {
-		// Clone list of players, so that the original isn't touched
-		return playerStore.playerList.slice(0);
+		// Clone list of people, so that the original isn't touched
+		return peopleStore.peopleList.slice(0);
 	}
 });
 
-dataStore.get("players", function (list) {
+dataStore.get("people", function (list) {
 	if (list) {
-		playerStore.addPlayers(list, true);
+		peopleStore.addPeople(list, true);
 	}
 });

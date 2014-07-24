@@ -69,59 +69,59 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 		}
 	});
 
-	// Players
-	$urlRouterProvider.when("/players", "/players/list");
-	$stateProvider.state("players", {
-		url: "/players",
+	// People
+	$urlRouterProvider.when("/people", "/people/list");
+	$stateProvider.state("people", {
+		url: "/people",
 		templateUrl: "pages/people.html",
 	});
-	$stateProvider.state("players.list_players", {
+	$stateProvider.state("people.list_people", {
 		url: "/list",
 		templateUrl: "pages/people.list.html",
 		controller: function ($scope, $state) {
-			$scope.players = playerStore.players;
-			$scope.removePlayer = function (name) {
-				playerStore.removePlayer(name);
+			$scope.people = peopleStore.people;
+			$scope.removePerson = function (name) {
+				peopleStore.removePerson(name);
 				reload($scope, $state);
 			};
 		},
 	});
-	$stateProvider.state("players.add_players", {
+	$stateProvider.state("people.add_people", {
 		url: "/add",
 		templateUrl: "pages/people.add.html",
 		controller: function ($scope, $state) {
-			$scope.playersToAdd = "";
-			$scope.addPlayers = function () {
-				playerStore.addPlayers($scope.playersToAdd);
-				$state.go("^.list_players");
+			$scope.peopleToAdd = "";
+			$scope.addPeople = function () {
+				peopleStore.addPeople($scope.peopleToAdd);
+				$state.go("^.list_people");
 			};
 		},
 	});
 
 	// Game
-	$urlRouterProvider.when("/game", "/game/list_players");
+	$urlRouterProvider.when("/game", "/game/list_people");
 	$stateProvider.state("game", {
 		url: "/game",
 		templateUrl: "pages/game.html",
 		controller: function ($scope, $state) {
-			$scope.selectedPlayers = [];
+			$scope.selectedPeople = [];
 			$scope.selectedScenario = "";
-			$scope.playerSelected = function (player) {
-				if ( $scope.selectedPlayers.indexOf(player) === -1 ) {
+			$scope.personSelected = function (person) {
+				if ( $scope.selectedPeople.indexOf(person) === -1 ) {
 					return "";
 				} else {
-					return "player__selected";
+					return "person__selected";
 				}
 			};
-			$scope.togglePlayer = function (player) {
-				var i = $scope.selectedPlayers.indexOf(player)
+			$scope.togglePerson = function (person) {
+				var i = $scope.selectedPeople.indexOf(person)
 				if ( i === -1 ) {
-					$scope.selectedPlayers.push(player);
+					$scope.selectedPeople.push(person);
 				} else {
-					$scope.selectedPlayers.splice(i, 1);
+					$scope.selectedPeople.splice(i, 1);
 				}
 			};
-			$scope.confirmPlayerSelection = function () {
+			$scope.confirmPeopleSelection = function () {
 				$state.go("^.list_scenarios");
 			};
 			$scope.scenarioSelected = function (scenario) {
@@ -140,32 +140,32 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 			};
 			$scope.confirmScenarioSelection = function () {
 				scenarioStore.load($scope.scenario, function (scenario) {
-					var game = new Game(scenario, $scope.selectedPlayers);
+					var game = new Game(scenario, $scope.selectedPeople);
 				});
 			};
 		},
 	});
-	$stateProvider.state("game.list_players", {
-		url: "/list_players",
+	$stateProvider.state("game.list_people", {
+		url: "/list_people",
 		templateUrl: "pages/people.list.html",
 		controller: function ($scope) {
-			$scope.players = playerStore.players;
+			$scope.people = peopleStore.people;
 		},
 	});
-	$stateProvider.state("game.add_players", {
-		url: "/add_players",
+	$stateProvider.state("game.add_people", {
+		url: "/add_people",
 		templateUrl: "pages/people.add.html",
 		controller: function ($scope, $state) {
-			$scope.playersToAdd = "";
-			$scope.addPlayers = function () {
-				var added = playerStore.addPlayers($scope.playersToAdd),
+			$scope.peopleToAdd = "";
+			$scope.addPeople = function () {
+				var added = peopleStore.addPeople($scope.peopleToAdd),
 					i;
 
 				for ( i = 0; i < added.length; i++ ) {
-					$scope.selectedPlayers.push(added[i]);
+					$scope.selectedPeople.push(added[i]);
 				}
 
-				$state.go("^.list_players");
+				$state.go("^.list_people");
 			};
 		},
 	});
