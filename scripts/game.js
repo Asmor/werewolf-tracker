@@ -1,10 +1,12 @@
-/* jshint globalstrict: true */
+/* global Global */
+/* global Scenario */
+/* exported Game */
 "use strict";
 
 function Game(scenario, players) {
 	var game = this,
-		villager = rolesByName["Villager"],
-		diff, deck, i;
+		villager = Global.rolesByName.Villager,
+		diff;
 	game.players = {};
 	game.scenario = new Scenario(scenario.export);
 

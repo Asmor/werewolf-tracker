@@ -1,5 +1,5 @@
-/* jshint globalstrict: true */
-/* global rolesByName */
+/* global Global */
+/* exported Scenario */
 "use strict";
 
 function Scenario(load) {
@@ -8,8 +8,8 @@ function Scenario(load) {
 	scenario.playerCount = 0;
 	scenario.minimumPlayers = 0;
 	scenario.teams = {};
-	scenario.teams[teams.werewolf] = 0;
-	scenario.teams[teams.villager] = 0;
+	scenario.teams[Global.teams.werewolf] = 0;
+	scenario.teams[Global.teams.villager] = 0;
 	scenario.name = "";
 
 	Object.defineProperty(scenario, "deck", {
@@ -17,7 +17,7 @@ function Scenario(load) {
 			var deck = [];
 
 			Object.keys(scenario.roles).forEach(function (key) {
-				var role = rolesByName[key],
+				var role = Global.rolesByName[key],
 					i;
 				for ( i = 0; i < scenario.roles[key]; i++) {
 					deck.push(role);
@@ -48,9 +48,9 @@ function Scenario(load) {
 			var total = 0;
 
 			Object.keys(scenario.roles).forEach(function (key) {
-				var role = rolesByName[key],
+				var role = Global.rolesByName[key],
 					ct = scenario.roles[key];
-				total += getRoleValue(role, scenario) * ct;
+				total += Global.getRoleValue(role, scenario) * ct;
 			});
 
 			return total;
@@ -64,7 +64,7 @@ function Scenario(load) {
 			scenario.roles[role.name] = 0;
 		}
 
-		var oldQty = scenario.roles[role.name]
+		var oldQty = scenario.roles[role.name];
 
 		qty = normalizeQty(oldQty + qty, role);
 
@@ -85,7 +85,7 @@ function Scenario(load) {
 			return 0;
 		}
 
-		var oldQty = scenario.roles[role.name]
+		var oldQty = scenario.roles[role.name];
 
 		qty = normalizeQty(oldQty - qty, role, true);
 
@@ -104,7 +104,7 @@ function Scenario(load) {
 	function adjustTotals(role, diff) {
 		scenario.playerCount += diff;
 
-		if ( role !== rolesByName["Villager"] ) {
+		if ( role !== Global.rolesByName.Villager ) {
 			scenario.minimumPlayers += diff;
 		}
 
@@ -115,9 +115,9 @@ function Scenario(load) {
 		scenario.teams[role.team] += diff;
 
 		if (
-			scenario.teams[role.team] <= 0
-			&& role.team !== teams.werewolf
-			&& role.team !== teams.villager
+			scenario.teams[role.team] <= 0 &&
+			role.team !== Global.teams.werewolf &&
+			role.team !== Global.teams.villager
 		) {
 			delete scenario.teams[role.team];
 		}
@@ -126,7 +126,7 @@ function Scenario(load) {
 	if (load) {
 		scenario.name = load.name;
 		Object.keys(load.roles).forEach(function (key) {
-			var role = rolesByName[key];
+			var role = Global.rolesByName[key];
 			scenario.add(role, load.roles[key]);
 		});
 	}

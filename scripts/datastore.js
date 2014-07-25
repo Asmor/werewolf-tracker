@@ -1,7 +1,7 @@
-/* jshint globalstrict: true */
+/* global Global */
 "use strict";
 
-var dataStore = {
+Global.dataStore = {
 	get: function (key, callback) {
 		var data = localStorage[key];
 		if (data) {

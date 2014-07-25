@@ -1,9 +1,8 @@
-/* jshint globalstrict: true */
-/* global dataStore */
+/* global Global */
 /* global Scenario */
 "use strict";
 
-var scenarioStore = {
+Global.scenarioStore = {
 	scenarios: [],
 	getKey: function (name) {
 		if ( typeof name !== "string" ) {
@@ -13,9 +12,9 @@ var scenarioStore = {
 		return "scenario:" + name;		
 	},
 	load: function (name, callback) {
-		var key = scenarioStore.getKey(name);
+		var key = Global.scenarioStore.getKey(name);
 
-			dataStore.get(key, function (data) {
+			Global.dataStore.get(key, function (data) {
 				var scenario = new Scenario(data);
 				callback(scenario);
 			});
@@ -25,34 +24,34 @@ var scenarioStore = {
 			name = name.name;
 		}
 
-		var key = scenarioStore.getKey(name),
-			i = scenarioStore.scenarios.indexOf(name);
+		var key = Global.scenarioStore.getKey(name),
+			i = Global.scenarioStore.scenarios.indexOf(name);
 
 		if ( i !== -1 ) {
-			scenarioStore.scenarios.splice(i, 1);
+			Global.scenarioStore.scenarios.splice(i, 1);
 		}
 
-		dataStore.remove(key);
-		dataStore.store("scenarios", scenarioStore.scenarios);
+		Global.dataStore.remove(key);
+		Global.dataStore.store("scenarios", Global.scenarioStore.scenarios);
 	},
 	save: function (scenario, oldName) {
 		if (oldName) {
-			scenarioStore.remove(oldName);
+			Global.scenarioStore.remove(oldName);
 		}
 
-		if (scenarioStore.scenarios.indexOf(scenario.name) === -1) {
-			scenarioStore.scenarios.push(scenario.name);
+		if (Global.scenarioStore.scenarios.indexOf(scenario.name) === -1) {
+			Global.scenarioStore.scenarios.push(scenario.name);
 		}
 
-		var key = scenarioStore.getKey(scenario.name);
+		var key = Global.scenarioStore.getKey(scenario.name);
 
-		dataStore.store(key, scenario.export);
-		dataStore.store("scenarios", scenarioStore.scenarios);
+		Global.dataStore.store(key, scenario.export);
+		Global.dataStore.store("scenarios", Global.scenarioStore.scenarios);
 	},
 };
 
-dataStore.get("scenarios", function (a) {
+Global.dataStore.get("scenarios", function (a) {
 	if (a) {
-		scenarioStore.scenarios = a;
+		Global.scenarioStore.scenarios = a;
 	}
 });

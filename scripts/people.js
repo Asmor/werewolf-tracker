@@ -1,7 +1,7 @@
-/* jshint globalstrict: true */
+/* global Global */
 "use strict";
 
-var peopleStore = {
+Global.peopleStore = {
 	peopleList: [],
 	addPeople: function (list, skipSave) {
 		var toAdd = list.split("\n"),
@@ -10,43 +10,43 @@ var peopleStore = {
 
 		for (i = 0; i < toAdd.length; i++) {
 			name = toAdd[i].trim();
-			if ( name && (peopleStore.peopleList.indexOf(name) === -1) ) {
-				peopleStore.peopleList.push(name);
+			if ( name && (Global.peopleStore.peopleList.indexOf(name) === -1) ) {
+				Global.peopleStore.peopleList.push(name);
 				added.push(name);
 			}
 		}
 
-		peopleStore.peopleList.sort(function (a, b) {
+		Global.peopleStore.peopleList.sort(function (a, b) {
 			return a.toLowerCase() > b.toLowerCase();
 		});
 
-		if ( !skipSave ) { peopleStore.save(); }
+		if ( !skipSave ) { Global.peopleStore.save(); }
 
 		return added;
 	},
 	removePerson: function (name, skipSave) {
-		var i = peopleStore.peopleList.indexOf(name);
+		var i = Global.peopleStore.peopleList.indexOf(name);
 
 		if ( i !== -1 ) {
-			peopleStore.peopleList.splice(i, 1);
+			Global.peopleStore.peopleList.splice(i, 1);
 		}
 
-		if ( !skipSave ) { peopleStore.save(); }
+		if ( !skipSave ) { Global.peopleStore.save(); }
 	},
 	save: function () {
-		dataStore.store("people", peopleStore.peopleList.join("\n"));	
+		Global.dataStore.store("people", Global.peopleStore.peopleList.join("\n"));	
 	}
 };
 
-Object.defineProperty(peopleStore, "people", {
+Object.defineProperty(Global.peopleStore, "people", {
 	get: function () {
 		// Clone list of people, so that the original isn't touched
-		return peopleStore.peopleList.slice(0);
+		return Global.peopleStore.peopleList.slice(0);
 	}
 });
 
-dataStore.get("people", function (list) {
+Global.dataStore.get("people", function (list) {
 	if (list) {
-		peopleStore.addPeople(list, true);
+		Global.peopleStore.addPeople(list, true);
 	}
 });

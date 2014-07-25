@@ -1,32 +1,33 @@
-/* jshint globalstrict: true */
+/* global Global */
 "use strict";
 
-var teams = {
-		werewolf: "Werewolves",
-		villager: "Villagers",
-	}, roles = [], rolesByName = {};
-
+Global.teams = {
+	werewolf: "Werewolves",
+	villager: "Villagers",
+};
+Global.roles = [];
+Global.rolesByName = {};
 
 function Role(opts) {
 	// Need to give a name to "this" so we can reference it inside other functions
 	var role = this,
 		defaults = {
 			name: "",
-			team: teams.villager,
+			team: Global.teams.villager,
 			value: 1,
 			min: 1,
 			max: 1,
-			init: function () { return [] },
+			init: function () { return []; },
 			looksLikeWerewolf: function () {
-				return role.team === teams.werewolf;
+				return role.team === Global.teams.werewolf;
 			},
 			teamClass: function () {
 				return "role__team-" + role.team.toLowerCase();
 			},
 			sortOrder: function () {
-				if ( role.team === teams.villager ) {
+				if ( role.team === Global.teams.villager ) {
 					return 4;
-				} else if ( role.team === teams.werewolf ) {
+				} else if ( role.team === Global.teams.werewolf ) {
 					return 5;
 				} else {
 					return 6;
@@ -53,8 +54,8 @@ function makeProperty(obj, propname, opts, defaultHandler) {
 }
 
 function addRole(role) {
-	roles.push(role);
-	rolesByName[role.name] = role;
+	Global.roles.push(role);
+	Global.rolesByName[role.name] = role;
 }
 
 addRole(new Role({ name: "Villager",
@@ -66,7 +67,7 @@ addRole(new Role({ name: "Seer",
 	sortOrder: 2,
 }));
 addRole(new Role({ name: "Werewolf",
-	team: teams.werewolf,
+	team: Global.teams.werewolf,
 	value: -6,
 	max: 12,
 	sortOrder: 3,
@@ -77,6 +78,7 @@ addRole(new Role({ name: "Frankenstein",
 			action: "subscribe",
 			subscribeTo: "death",
 			notify: function (role, player) {
+				/* jshint unused: false */
 				// TODO: If the role was a villager, assign his role to Frank
 			},
 		}];
@@ -87,14 +89,14 @@ addRole(new Role({ name: "Frankenstein",
 				return 0;
 			}
 
-			var i, total = 0;
+			var total = 0;
 
 			Object.keys(args.scenario.roles).forEach(function (key) {
-				var role = rolesByName[key],
+				var role = Global.rolesByName[key],
 					ct = args.scenario.roles[key];
 				if (
-					(role.team === teams.villager)
-					&& ! role.name.match(/^(Frankenstein|Villager)$/)
+					(role.team === Global.teams.villager) &&
+					! role.name.match(/^(Frankenstein|Villager)$/)
 				) {
 					total += 2 * ct;
 				}
@@ -102,7 +104,7 @@ addRole(new Role({ name: "Frankenstein",
 			});
 
 			return total;
-		}
+		};
 	},
 }));
 addRole(new Role({ name: "Lycan",
@@ -116,7 +118,7 @@ addRole(new Role({ name: "Mason",
 	looksLikeWerewolf: true,
 }));
 
-roles.sort(function (a, b) {
+Global.roles.sort(function (a, b) {
 	if ( a.sortOrder === b.sortOrder ) {
 		return a.name.toLowerCase() > b.name.toLowerCase();
 	} else {
@@ -124,10 +126,10 @@ roles.sort(function (a, b) {
 	}
 });
 
-function getRoleValue(role, scenario) {
+Global.getRoleValue = function (role, scenario) {
 	if ( typeof role.value === "function" ) {
 		return role.value({scenario: scenario});
 	} else {
 		return role.value;
 	}
-}
+};
