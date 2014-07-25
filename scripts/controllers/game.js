@@ -85,6 +85,6 @@ Controllers.game.scenarios.list = {
 	url: "/choose_scenario",
 	templateUrl: "pages/scenario.list.html",
 	controller: function ($scope) {
-		$scope.scenarios = Global.scenarioStore.scenarios.slice(0);
+		$scope.scenarioKeys = Global.scenarioStore.scenarioKeys;
 	},
 };

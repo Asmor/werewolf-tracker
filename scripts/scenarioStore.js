@@ -3,7 +3,7 @@
 "use strict";
 
 Global.scenarioStore = {
-	scenarios: [],
+	scenarios: {},
 	getKey: function (name) {
 		if ( typeof name !== "string" ) {
 			name = name.name;
@@ -11,47 +11,52 @@ Global.scenarioStore = {
 
 		return "scenario:" + name;		
 	},
-	load: function (name, callback) {
+	load: function (name) {
 		var key = Global.scenarioStore.getKey(name);
 
-			Global.dataStore.get(key, function (data) {
-				var scenario = new Scenario(data);
-				callback(scenario);
-			});
+		Global.dataStore.get(key, function (data) {
+			var scenario = new Scenario(data);
+			Global.scenarioStore.scenarios[scenario.name] = scenario;
+		});
 	},
 	remove: function (name) {
 		if ( typeof name !== "string" ) {
 			name = name.name;
 		}
 
-		var key = Global.scenarioStore.getKey(name),
-			i = Global.scenarioStore.scenarios.indexOf(name);
+		var key = Global.scenarioStore.getKey(name);
 
-		if ( i !== -1 ) {
-			Global.scenarioStore.scenarios.splice(i, 1);
-		}
+		delete Global.scenarioStore.scenarios[name];
 
 		Global.dataStore.remove(key);
-		Global.dataStore.store("scenarios", Global.scenarioStore.scenarios);
+		Global.dataStore.store("scenarios", Global.scenarioStore.scenarioKeys);
 	},
 	save: function (scenario, oldName) {
 		if (oldName) {
 			Global.scenarioStore.remove(oldName);
 		}
 
-		if (Global.scenarioStore.scenarios.indexOf(scenario.name) === -1) {
-			Global.scenarioStore.scenarios.push(scenario.name);
-		}
+		Global.scenarioStore.scenarios[scenario.name] = scenario;
 
 		var key = Global.scenarioStore.getKey(scenario.name);
 
 		Global.dataStore.store(key, scenario.export);
-		Global.dataStore.store("scenarios", Global.scenarioStore.scenarios);
+		Global.dataStore.store("scenarios", Global.scenarioStore.scenarioKeys);
 	},
 };
 
+Object.defineProperty(Global.scenarioStore, "scenarioKeys", {
+	get: function () {
+		return Object.keys(Global.scenarioStore.scenarios).sort(function (a,b) {
+			return a.toLowerCase() > b.toLowerCase();
+		});
+	}
+});
+
 Global.dataStore.get("scenarios", function (a) {
 	if (a) {
-		Global.scenarioStore.scenarios = a;
+		for ( var i = 0; i < a.length; i++ ) {
+			Global.scenarioStore.load(a[i]);
+		}
 	}
 });

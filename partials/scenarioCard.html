@@ -1,6 +1,6 @@
-<div class="scenario" ng-class="scenarioSelected(scenario)" ng-click="selectScenario(scenario)">
-	{{ scenario }}
+<div class="scenario" ng-class="scenarioSelected(scenarioKey)" ng-click="selectScenario(scenarioKey)">
+	{{ scenarioKey }}
 	<span class="scenario--controls">
-		<button class="button-simple button-simple__modify" ng-click="editScenario(scenario)"><i class="fa fa-edit"></i></button>
+		<button class="button-simple button-simple__modify" ng-click="editScenario(scenarioKey)"><i class="fa fa-edit"></i></button>
 	</span>
 </div>

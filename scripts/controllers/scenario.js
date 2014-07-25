@@ -10,10 +10,8 @@ Controllers.scenario.base = {
 	templateUrl: "pages/scenario.html",
 	controller: function ($scope, $state) {
 		$scope.editScenario = function (name) {
-			Global.scenarioStore.load(name, function (scenario) {
-				$scope.scenario = scenario;
-				$state.go("^.manage");
-			});
+			$scope.scenario = Global.scenarioStore.scenarios[name];
+			$state.go("^.manage");
 		};
 	}
 };
@@ -22,7 +20,7 @@ Controllers.scenario.list = {
 	url: "/list",
 	templateUrl: "pages/scenario.list.html",
 	controller: function ($scope) {
-		$scope.scenarios = Global.scenarioStore.scenarios.slice(0);
+		$scope.scenarioKeys = Global.scenarioStore.scenarioKeys;
 	},
 };
 
