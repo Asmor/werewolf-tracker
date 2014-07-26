@@ -52,6 +52,9 @@ Controllers.game.base = {
 				var game = new Game(scenario, $scope.selectedPeople);
 			});
 		};
+		$scope.editScenario = function (arg) {
+			console.log(arg);
+		};
 	},
 };
 

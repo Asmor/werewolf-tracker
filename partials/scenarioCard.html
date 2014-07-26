@@ -1,6 +1,24 @@
 <div class="scenario" ng-class="scenarioSelected(scenario.name)" ng-click="selectScenario(scenario.name)">
-	{{ scenario.name }}
-	<span class="scenario--controls">
-		<button class="button-simple button-simple__modify" ng-click="editScenario(scenario.name)"><i class="fa fa-edit"></i></button>
-	</span>
+	<div class="scenario--titlebar">
+		<span class="scenario--name">{{ scenario.name }}</span>
+		<span class="scenario--controls">
+			<button class="button-simple button-simple__modify" ng-click="editScenario(scenario.name);$event.stopPropagation()"><i class="fa fa-edit"></i></button>
+		</span>
+	</div>
+	<div class="scenario--infobar">
+		<span class="scenario--datum">
+			Minimum players: {{ scenario.minimumPlayers }}
+		</span>
+	</div>
+	<table class="scenario--roles">
+		<tbody ng-repeat="(teamName, teamRoles) in scenario.rolesByTeam track by teamName" class="scenario--roles-group" ng-class="'scenario--roles-group__' + teamName">
+			<tr>
+				<td colspan="2">{{ teamName }}</td>
+			</tr>
+			<tr ng-repeat="(role, qty) in teamRoles">
+				<td>{{ role }}</td>
+				<td>{{ qty }}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

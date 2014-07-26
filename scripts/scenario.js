@@ -3,7 +3,8 @@
 "use strict";
 
 function Scenario(load) {
-	var scenario = this;
+	var scenario = this,
+		_rolesByTeam;
 	scenario.roles = {};
 	scenario.playerCount = 0;
 	scenario.minimumPlayers = 0;
@@ -12,14 +13,28 @@ function Scenario(load) {
 	scenario.teams[Global.teams.villager] = 0;
 	scenario.name = "";
 
+	Object.defineProperty(scenario, "balance", {
+		get: function () {
+			var total = 0;
+
+			Object.keys(scenario.roles).forEach(function (roleName) {
+				var role = Global.rolesByName[roleName],
+					ct = scenario.roles[roleName];
+				total += Global.getRoleValue(role, scenario) * ct;
+			});
+
+			return total;
+		}
+	});
+
 	Object.defineProperty(scenario, "deck", {
 		get: function () {
 			var deck = [];
 
-			Object.keys(scenario.roles).forEach(function (key) {
-				var role = Global.rolesByName[key],
+			Object.keys(scenario.roles).forEach(function (roleName) {
+				var role = Global.rolesByName[roleName],
 					i;
-				for ( i = 0; i < scenario.roles[key]; i++) {
+				for ( i = 0; i < scenario.roles[roleName]; i++) {
 					deck.push(role);
 				}
 			});
@@ -32,8 +47,8 @@ function Scenario(load) {
 		get: function () {
 			var clone = {};
 
-			Object.keys(scenario.roles).forEach(function (key) {
-				clone[key] = scenario.roles[key];
+			Object.keys(scenario.roles).forEach(function (roleName) {
+				clone[roleName] = scenario.roles[roleName];
 			});
 
 			return {
@@ -43,21 +58,33 @@ function Scenario(load) {
 		},
 	});
 
-	Object.defineProperty(scenario, "balance", {
+	Object.defineProperty(scenario, "rolesByTeam", {
 		get: function () {
-			var total = 0;
+			if ( ! _rolesByTeam ) {
+				_rolesByTeam = {};
 
-			Object.keys(scenario.roles).forEach(function (key) {
-				var role = Global.rolesByName[key],
-					ct = scenario.roles[key];
-				total += Global.getRoleValue(role, scenario) * ct;
-			});
+				Object.keys(scenario.roles).forEach(function (roleName) {
+					// Nobody cares about plain old villagers!
+					if ( roleName === "Villager" ) {
+						return;
+					}
 
-			return total;
+					var role = Global.rolesByName[roleName];
+
+					if ( ! _rolesByTeam[role.team] ) {
+						_rolesByTeam[role.team] = {};
+					}
+
+					_rolesByTeam[role.team][roleName] = scenario.roles[roleName];
+				});
+			}
+
+			return _rolesByTeam;
 		}
 	});
 
 	scenario.add = function (role, qty) {
+		scenario.dirty();
 		qty = qty || 1;
 
 		if ( ! scenario.roles[role.name] ) {
@@ -74,11 +101,16 @@ function Scenario(load) {
 		return qty;
 	};
 
+	scenario.dirty = function () {
+		_rolesByTeam = null;
+	};
+
 	scenario.getQty = function (role) {
 		return scenario.roles[role.name] || 0;
 	};
 
 	scenario.remove = function (role, qty) {
+		scenario.dirty();
 		qty = qty || 1;
 
 		if ( ! scenario.roles[role.name] ) {
@@ -125,9 +157,9 @@ function Scenario(load) {
 
 	if (load) {
 		scenario.name = load.name;
-		Object.keys(load.roles).forEach(function (key) {
-			var role = Global.rolesByName[key];
-			scenario.add(role, load.roles[key]);
+		Object.keys(load.roles).forEach(function (roleName) {
+			var role = Global.rolesByName[roleName];
+			scenario.add(role, load.roles[roleName]);
 		});
 	}
 }

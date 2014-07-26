@@ -1,5 +1,6 @@
 .scenario {
 	@extend .card;
+	height: auto;
 
 	background-color: #ddd;
 
@@ -11,5 +12,16 @@
 	&--controls {
 		float: right;
 		display: inline-block;
+	}
+
+	&--roles-group {
+		color: white;
+		&__Villagers {
+			background-color: $villager-color;
+		}
+
+		&__Werewolves {
+			background-color: $werewolf-color;
+		}
 	}
 }
