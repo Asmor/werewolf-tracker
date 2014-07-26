@@ -20,7 +20,7 @@ Controllers.scenario.list = {
 	url: "/list",
 	templateUrl: "pages/scenario.list.html",
 	controller: function ($scope) {
-		$scope.scenarioKeys = Global.scenarioStore.scenarioKeys;
+		$scope.scenarios = Global.scenarioStore.scenarios;
 	},
 };
 
