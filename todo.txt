@@ -1,5 +1,3 @@
-Update scenario card with more info
-Make editing scenarios work from game
 
 Hammer time for touch
 Start game

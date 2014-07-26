@@ -1,3 +1,3 @@
-<a ui-sref="^.manage"><button>Create scenario</button></a>
+<a ui-sref="^.manage_scenario"><button>Create scenario</button></a>
 <button ng-click="confirmScenarioSelection()" ng-show="confirmScenarioSelection &amp;&amp; scenario">Confirm selected scenario</button><br>
 <ng-include ng-repeat="scenario in scenarios | orderBy : scenario.name.toLowerCase()" src="'partials/scenarioCard.html'"></ng-include>

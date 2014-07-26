@@ -16,7 +16,7 @@ Global.scenarioStore = {
 
 		Global.dataStore.get(key, function (data) {
 			var scenario = new Scenario(data);
-			Global.scenarioStore.scenarios[scenario.name] = scenario;
+			Global.scenarioStore.scenarios[scenario.pathname] = scenario;
 		});
 	},
 	remove: function (name) {
@@ -36,9 +36,9 @@ Global.scenarioStore = {
 			Global.scenarioStore.remove(oldName);
 		}
 
-		Global.scenarioStore.scenarios[scenario.name] = scenario;
+		Global.scenarioStore.scenarios[scenario.pathname] = scenario;
 
-		var key = Global.scenarioStore.getKey(scenario.name);
+		var key = Global.scenarioStore.getKey(scenario.pathname);
 
 		Global.dataStore.store(key, scenario.export);
 		Global.dataStore.store("scenarios", Global.scenarioStore.scenarioKeys);

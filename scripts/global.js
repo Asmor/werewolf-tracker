@@ -11,5 +11,5 @@ var Controllers = {},
 				inherit: false,
 				notify: true,
 			});
-		},
+		}
 	};

@@ -58,6 +58,16 @@ function Scenario(load) {
 		},
 	});
 
+	Object.defineProperty(scenario, "pathname", {
+		get: function () {
+			return scenario.name
+				// Replaces white space with plus
+				.replace(/\s/g, "+")
+				// Replace all exotic characters with underscores
+				.replace(/[^\w+-]/g, "_");
+		},
+	});
+
 	Object.defineProperty(scenario, "rolesByTeam", {
 		get: function () {
 			if ( ! _rolesByTeam ) {

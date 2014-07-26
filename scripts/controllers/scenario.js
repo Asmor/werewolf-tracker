@@ -8,12 +8,6 @@ Controllers.scenario = {};
 Controllers.scenario.base = {
 	url: "/scenario",
 	templateUrl: "pages/scenario.html",
-	controller: function ($scope, $state) {
-		$scope.editScenario = function (name) {
-			$scope.scenario = Global.scenarioStore.scenarios[name];
-			$state.go("^.manage");
-		};
-	}
 };
 
 Controllers.scenario.list = {
@@ -25,20 +19,19 @@ Controllers.scenario.list = {
 };
 
 Controllers.scenario.manage = {
-	url: "/manage",
+	url: "/manage/:scenarioName",
 	templateUrl: "pages/scenario.manage.html",
 	controller: function ($scope, $state) {
-		$scope.roles = Global.roles;
-		if ( ! $scope.scenario ) {
-			$scope.scenario = new Scenario();
-		}
+		var scenario = Global.scenarioStore.scenarios[$state.params.scenarioName] || new Scenario(),
+			oldScenarioName = scenario.pathname;
 
-		$scope.oldScenarioName = $scope.scenario.name;
+		$scope.roles = Global.roles;
+		$scope.scenario = scenario;
 
 		$scope.saveScenario = function () {
-			if ($scope.scenario.name.trim()) {
-				Global.scenarioStore.save($scope.scenario, $scope.oldScenarioName);
-				$scope.scenario = false;
+			if (scenario.name.trim()) {
+				Global.scenarioStore.save(scenario, oldScenarioName);
+				scenario = false;
 				$state.go("^.list_scenarios");
 			} else {
 				alert("Enter a name for the scenario");
@@ -46,12 +39,12 @@ Controllers.scenario.manage = {
 		};
 
 		$scope.removeScenario = function () {
-			Global.scenarioStore.remove($scope.oldScenarioName);
+			Global.scenarioStore.remove(oldScenarioName);
 				$state.go("^.list_scenarios");
 		};
 
 		$scope.getRoleVal = function (role) {
-			return Global.getRoleValue(role, $scope.scenario);
+			return Global.getRoleValue(role, scenario);
 		};
 	}
 };

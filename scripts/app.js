@@ -17,7 +17,7 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.when("/scenario", "/scenario/list");
 	$stateProvider.state("scenario", Controllers.scenario.base);
 	$stateProvider.state("scenario.list_scenarios", Controllers.scenario.list);
-	$stateProvider.state("scenario.manage", Controllers.scenario.manage);
+	$stateProvider.state("scenario.manage_scenario", Controllers.scenario.manage);
 
 	// People
 	$urlRouterProvider.when("/people", "/people/list");
@@ -31,6 +31,7 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	$stateProvider.state("game.list_people", Controllers.game.people.list);
 	$stateProvider.state("game.add_people", Controllers.game.people.add);
 	$stateProvider.state("game.list_scenarios", Controllers.game.scenarios.list);
+	$stateProvider.state("game.manage_scenario", Controllers.game.scenarios.manage);
 
 });
 

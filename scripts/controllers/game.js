@@ -91,3 +91,5 @@ Controllers.game.scenarios.list = {
 		$scope.scenarios = Global.scenarioStore.scenarios;
 	},
 };
+
+Controllers.game.scenarios.manage = Controllers.scenario.manage;
