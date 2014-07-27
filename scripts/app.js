@@ -32,6 +32,8 @@ wwApp.config(function ($stateProvider, $urlRouterProvider) {
 	$stateProvider.state("game.add_people", Controllers.game.people.add);
 	$stateProvider.state("game.list_scenarios", Controllers.game.scenarios.list);
 	$stateProvider.state("game.manage_scenario", Controllers.game.scenarios.manage);
+	$stateProvider.state("game.active", Controllers.game.active.base);
+	$stateProvider.state("game.active.select_players", Controllers.game.active.selectPlayers);
 
 });
 

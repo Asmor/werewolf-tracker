@@ -6,6 +6,7 @@
 Controllers.game = {
 	people: {},
 	scenarios: {},
+	active: {},
 };
 
 Controllers.game.base = {
@@ -41,16 +42,16 @@ Controllers.game.base = {
 		};
 		$scope.selectScenario = function (scenario) {
 			if ($scope.scenario === scenario) {
-				$scope.scenario = "";
+				$scope.scenario = undefined;
 			} else {
 				$scope.scenario = scenario;
 			}
 		};
 		$scope.confirmScenarioSelection = function () {
-			Global.scenarioStore.load($scope.scenario, function (scenario) {
-				/* jshint unused: false */
-				var game = new Game(scenario, $scope.selectedPeople);
-			});
+			$scope.game = new Game($scope.scenario, $scope.selectedPeople);
+			$scope.game.getNightActions();
+			$scope.game.getNextAction();
+			$state.go( "^.active." + $scope.game.currentAction.state );
 		};
 	},
 };
@@ -87,6 +88,16 @@ Controllers.game.scenarios.list = {
 	controller: function ($scope) {
 		$scope.scenarios = Global.scenarioStore.scenarios;
 	},
+};
+
+Controllers.game.active.base = {
+	url: "/active",
+	templateUrl: "pages/game.active.html",
+};
+
+Controllers.game.active.selectPlayers = {
+	url: "/select_players",
+	templateUrl: "pages/game.select_players.html",
 };
 
 Controllers.game.scenarios.manage = Controllers.scenario.manage;

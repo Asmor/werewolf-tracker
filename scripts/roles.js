@@ -7,16 +7,35 @@ Global.teams = {
 };
 Global.roles = [];
 Global.rolesByName = {};
+Global.priorities = (function () {
+	var i = 0,
+		priorities = {};
+
+	priorities.first = i++;
+	priorities.beforeWerewolves = i++;
+	priorities.asWerewolf = i++;
+	priorities.afterWerewolves = i++;
+	priorities.beforeSeer = i++;
+	priorities.asSeer = i++;
+	priorities.afterSeer = i++;
+	priorities.any = i++;
+	priorities.last = i++;
+
+	return priorities;
+}());
 
 function Role(opts) {
 	// Need to give a name to "this" so we can reference it inside other functions
 	var role = this,
 		defaults = {
 			name: "",
+			namePlural: opts.name + "s",
 			team: Global.teams.villager,
 			value: 1,
 			min: 1,
 			max: 1,
+			needsId: true,
+			priority: Global.priorities.any,
 			init: function () { return []; },
 			looksLikeWerewolf: function () {
 				return role.team === Global.teams.werewolf;
@@ -61,13 +80,17 @@ function addRole(role) {
 addRole(new Role({ name: "Villager",
 	max: 15,
 	sortOrder: 1,
+	needsId: false,
 }));
 addRole(new Role({ name: "Seer",
 	value: 7,
 	sortOrder: 2,
+	priority: Global.priorities.afterWerewolves,
 }));
 addRole(new Role({ name: "Werewolf",
+	namePlural: "Werewolves",
 	team: Global.teams.werewolf,
+	priority: Global.priorities.asWerewolf,
 	value: -6,
 	max: 12,
 	sortOrder: 3,

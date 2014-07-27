@@ -1,3 +1,4 @@
+Only show scenarios where you have enough people
 
 Hammer time for touch
 Start game
@@ -10,14 +11,6 @@ Start game
 		Summarize night
 		Remind about effects
 		Get elimination(s) (may have none
-
-New user experience:
-	* Clicks start game
-	* Select players
-		* Add players
-	* Choose scenario
-		* Create scenario
-	* Sees card list. Prompted to start the game
 
 Bugs:
 	Can't edit scenario in /game/choose_scenario
